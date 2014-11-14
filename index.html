@@ -2,33 +2,31 @@
 <html>
 
 <head>
+    <title>jQuery Mobile &amp; HTML Imports using progressive enhancement</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <head>
-        <title>jQuery Mobile &amp; HTML Imports using progressive enhancement</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/jquery.mobile-1.4.5.css" type="text/css" rel="stylesheet" />
 
-        <link href="css/jquery.mobile-1.4.5.css" type="text/css" rel="stylesheet" />
+    <script src="lib/jquery-2.1.1.js"></script>
+    <script src="lib/jquery.mobile-1.4.5.js"></script>
 
-        <script src="lib/jquery-2.1.1.js"></script>
-        <script src="lib/jquery.mobile-1.4.5.js"></script>
+    <script src="js/Controller.js"></script>
 
-        <script src="js/Controller.js"></script>
+    <!-- Page templates -->
+    <link rel="import" href="templates/home.html">
+    <link rel="import" href="templates/page-1.html">
+    <link rel="import" href="templates/page-2.html">
+    <link rel="import" href="templates/dialog.html">
 
-        <!-- Page templates -->
-        <link rel="import" href="templates/home.html">
-        <link rel="import" href="templates/page-1.html">
-        <link rel="import" href="templates/page-2.html">
-        <link rel="import" href="templates/dialog.html">
+</head>
 
-    </head>
+<body data-main-page="home">
+    <script>
 
-    <body data-main-page="home">
-        <script>
+        demo.Controller.init();
 
-            demo.Controller.init();
-
-        </script>
-    </body>
+    </script>
+</body>
 
 </html>
