@@ -9,7 +9,20 @@ demo.Controller = (function ($) {
     // for the presence of the template element's content attribute.
     var supportsHTMLTemplate = Boolean('content' in document.createElement('template'));
 
+    var mainPage, mainPageId;
+
     var init = function (config) {
+
+        mainPage = $('div[data-main-page]');
+        mainPageId = mainPage.attr('data-main-page');
+
+        // Always redirect to main page
+        $(window).bind('hashchange', function() {
+            var hash = window.location.hash.replace(/^#/, '');
+            if (hash === '') {
+                location.hash = mainPageId;
+            }
+        });
 
         // Use jQuery.load() if we don't have native HTML Imports support
         if (!supportsHTMLImports) {
@@ -56,7 +69,14 @@ demo.Controller = (function ($) {
         }
 
         var callback = function (component) {
-            $(document.body).append(component); // component maybe DOM Element or DocumentFragment
+
+            // If component is main page, replace it, if not, append
+            // component maybe DOM Element or DocumentFragment
+            if(options.templateId === mainPageId){
+                mainPage.replaceWith(component);
+            } else {
+                $(document.body).append(component);
+            }
 
             component = $('#' + options.templateId); // Get injected DOM Element
             if (!component.hasClass('ui-' + component.attr('data-role'))) { // If not already enhanced
@@ -64,13 +84,12 @@ demo.Controller = (function ($) {
             }
 
             // If this template is the main page, show it instantly
-            var mainPageId = $(document.body).attr('data-main-page');
             if (options.templateId === mainPageId) {
                 $.mobile.changePage(component, {
                     transition: 'none',
                     changeHash: true
                 });
-                location.hash = options.templateId;
+                location.hash = mainPageId;
             }
         };
 
