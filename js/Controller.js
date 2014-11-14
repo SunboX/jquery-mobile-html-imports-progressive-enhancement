@@ -16,7 +16,7 @@ demo.Controller = (function ($) {
             var imports = $('link[rel=import]');
             for(var i = 0, len = imports.length; i < len; i++){
                 $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function( response, status, xhr ) {
-                    if (status == 'error') {
+                    if (status === 'error') {
                         throw msg + xhr.status + ' ' + xhr.statusText;
                     }
                 });

@@ -12,7 +12,7 @@ var http = require('http'),
 function serveStaticFile(filename, response) {
     if (fs.statSync(filename).isDirectory()) filename += 'index.html';
 
-    fs.readFile(filename, 'binary', function(err, file) {
+    fs.readFile(filename, 'binary', function (err, file) {
         if (err) {
             response.writeHead(500, {
                 'Content-Type': 'text/plain'
@@ -29,21 +29,21 @@ function serveStaticFile(filename, response) {
     });
 }
 
-http.createServer(function(request, response) {
+http.createServer(function (request, response) {
 
     var filename = path.join(__dirname, url.parse(request.url).pathname);
 
-	fs.exists(filename, function(exists) {
-		if (!exists) {
-			response.writeHead(404, {
-				'Content-Type': 'text/plain'
-			});
-			response.write("404 Not Found\n");
-			response.end();
-			return;
-		}
-		serveStaticFile(filename, response);
-	});
+    fs.exists(filename, function (exists) {
+        if (!exists) {
+            response.writeHead(404, {
+                'Content-Type': 'text/plain'
+            });
+            response.write("404 Not Found\n");
+            response.end();
+            return;
+        }
+        serveStaticFile(filename, response);
+    });
 
 }).listen(8080);
 
