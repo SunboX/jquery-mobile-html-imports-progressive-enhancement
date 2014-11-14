@@ -31,7 +31,7 @@ demo.Controller = (function ($) {
         if (supportsHTMLImports) {
 
             // templateDoc refers to the "importee", which is template.html
-            var templateDoc = (options.context).ownerDocument;
+            var templateDoc = options.context.ownerDocument;
         }
 
         // Grab the contents of the template from templateDoc
