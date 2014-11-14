@@ -13,9 +13,6 @@ demo.Controller = (function ($) {
 
     var init = function (config) {
 
-        mainPage = $('div[data-main-page]');
-        mainPageId = mainPage.attr('data-main-page');
-
         // Always redirect to main page
         $(window).bind('hashchange', function() {
             var hash = window.location.hash.replace(/^#/, '');
@@ -38,6 +35,13 @@ demo.Controller = (function ($) {
     };
 
     var injectTemplate = function (options) {
+
+        // Use an empty page for main page placeholder
+        // and prevent jQuery Mobile to inject a blank page
+        if(!mainPage){
+            mainPage = $('div[data-main-page]');
+            mainPageId = mainPage.attr('data-main-page');
+        }
 
         var templateDoc = document;
 
@@ -87,7 +91,7 @@ demo.Controller = (function ($) {
             if (options.templateId === mainPageId) {
                 $.mobile.changePage(component, {
                     transition: 'none',
-                    changeHash: true
+                    changeHash: false
                 });
                 location.hash = mainPageId;
             }
