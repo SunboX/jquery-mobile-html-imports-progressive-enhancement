@@ -1,0 +1,1 @@
+call node %~dp0server & pause

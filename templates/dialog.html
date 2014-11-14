@@ -1,0 +1,17 @@
+<template data-template-id="dialog">
+    <div id="dialog" data-role="dialog">
+        <div data-role="content">
+            <h2>Info</h2>
+            <a href="#" data-role="button" data-rel="back">OK</a>
+        </div>
+    </div>
+</template>
+
+<script>
+
+    demo.Controller.injectTemplate({
+        context: document.currentScript,
+        templateId: 'dialog'
+    });
+
+</script>
