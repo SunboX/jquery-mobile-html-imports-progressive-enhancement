@@ -70,7 +70,7 @@ demo.Controller = (function ($) {
                     transition: 'none',
                     changeHash: true
                 });
-				location.hash = options.templateId;
+                location.hash = options.templateId;
             }
         };
 
