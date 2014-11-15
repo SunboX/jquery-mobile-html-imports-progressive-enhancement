@@ -34,7 +34,7 @@ demo.Controller = (function ($) {
 
         // Always redirect to main page
         $(window).bind('hashchange', function () {
-            var hash = window.location.hash.replace(/^#/, '');
+            var hash = location.hash.replace(/^#/, '');
             if (hash === '') {
                 replaceHash(mainPageId);
             }
