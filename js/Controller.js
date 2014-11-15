@@ -8,24 +8,18 @@ demo.Controller = (function ($) {
     // Test to see if the browser supports the HTML template element by checking
     // for the presence of the template element's content attribute.
     var supportsHTMLTemplate = Boolean('content' in document.createElement('template'));
+    
+    // history.replaceState support feature test
+    var supportsHistoryReplaceState = Boolean('replaceState' in history);
 
     // Replace location hash without new history entry
-    var replaceHash;
-    if ('replaceState' in history) {
-        replaceHash = function (newhash) {
-            if (('' + newhash).charAt(0) !== '#') {
-                newhash = '#' + newhash;
-            }
+    var replaceHash = function (newhash) {
+        newhash = '#' + newhash.replace(/^#/, '');
+        if (supportsHistoryReplaceState) {
             history.replaceState('', '', newhash);
-        };
-    } else {
-        var hash = location.hash;
-        replaceHash = function (newhash) {
-            if (location.hash !== hash) {
-                history.back();
-            }
-            location.hash = newhash;
-        };
+        } else {
+            location.replace(newhash);
+        }
     }
 
     var mainPage, mainPageId;
