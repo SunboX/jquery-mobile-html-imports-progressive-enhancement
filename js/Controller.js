@@ -61,7 +61,7 @@ demo.Controller = (function ($) {
     };
 
     var injectTemplate = function (options) {
-        var callback = function () {
+        var callback = function (options) {
 
             // Use an empty page for main page placeholder
             // and prevent jQuery Mobile to inject a blank page
@@ -126,10 +126,10 @@ demo.Controller = (function ($) {
         // maybe we have to wait until the DOM is ready
         if (!document.body) {
             $(document).ready(function () {
-                callback();
+                callback(options);
             }, false);
         } else {
-            callback();
+            callback(options);
         }
     };
 
