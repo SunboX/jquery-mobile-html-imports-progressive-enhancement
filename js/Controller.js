@@ -8,17 +8,17 @@ demo.Controller = (function ($) {
     // Test to see if the browser supports the HTML template element by checking
     // for the presence of the template element's content attribute.
     var supportsHTMLTemplate = Boolean('content' in document.createElement('template'));
-    
+
     // history.replaceState support feature test
     var supportsHistoryReplaceState = Boolean('replaceState' in history);
 
     // Replace location hash without new history entry
     var replaceHash = function (newhash) {
-        newhash = '#' + newhash.replace(/^#/, '');
+        newhash = '#' + newhash.replace(/^#/, ''); // ensure hash starts with #
         if (supportsHistoryReplaceState) {
-            history.replaceState('', '', newhash);
+            history.replaceState('', '', newhash); // replace history entry
         } else {
-            location.replace(newhash);
+            location.replace(newhash); // this works in all known browsers, even old IE
         }
     }
 
