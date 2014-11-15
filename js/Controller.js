@@ -9,23 +9,42 @@ demo.Controller = (function ($) {
     // for the presence of the template element's content attribute.
     var supportsHTMLTemplate = Boolean('content' in document.createElement('template'));
 
+    // Replace location hash without new history entry
+    var replaceHash;
+    if ('replaceState' in history) {
+        replaceHash = function (newhash) {
+            if (('' + newhash).charAt(0) !== '#') {
+                newhash = '#' + newhash;
+            }
+            history.replaceState('', '', newhash);
+        };
+    } else {
+        var hash = location.hash;
+        replaceHash = function (newhash) {
+            if (location.hash !== hash) {
+                history.back();
+            }
+            location.hash = newhash;
+        };
+    }
+
     var mainPage, mainPageId;
 
     var init = function (config) {
 
         // Always redirect to main page
-        $(window).bind('hashchange', function() {
+        $(window).bind('hashchange', function () {
             var hash = window.location.hash.replace(/^#/, '');
             if (hash === '') {
-                location.hash = mainPageId;
+                replaceHash(mainPageId);
             }
         });
 
         // Use jQuery.load() if we don't have native HTML Imports support
         if (!supportsHTMLImports) {
             var imports = $('link[rel=import]');
-            for(var i = 0, len = imports.length; i < len; i++){
-                $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function( response, status, xhr ) {
+            for (var i = 0, len = imports.length; i < len; i++) {
+                $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function (response, status, xhr) {
                     if (status === 'error') {
                         throw msg + xhr.status + ' ' + xhr.statusText;
                     }
@@ -38,7 +57,7 @@ demo.Controller = (function ($) {
 
         // Use an empty page for main page placeholder
         // and prevent jQuery Mobile to inject a blank page
-        if(!mainPage){
+        if (!mainPage) {
             mainPage = $('div[data-main-page]');
             mainPageId = mainPage.attr('data-main-page');
         }
@@ -63,7 +82,7 @@ demo.Controller = (function ($) {
 
         // If the browser supports HTML Template, we have to import the page Element
         // otherwise we will get the HTML Element already injected by jQuery.load()
-        if(supportsHTMLTemplate) {
+        if (supportsHTMLTemplate) {
             component = document.importNode(template.content, true);
         } else {
             component = template.querySelector('#' + options.templateId);
@@ -76,7 +95,7 @@ demo.Controller = (function ($) {
 
             // If component is main page, replace it, if not, append
             // component maybe DOM Element or DocumentFragment
-            if(options.templateId === mainPageId){
+            if (options.templateId === mainPageId) {
                 mainPage.replaceWith(component);
             } else {
                 $(document.body).append(component);
@@ -93,7 +112,7 @@ demo.Controller = (function ($) {
                     transition: 'none',
                     changeHash: false
                 });
-                location.hash = mainPageId;
+                replaceHash(mainPageId);
             }
         };
 
