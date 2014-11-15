@@ -39,7 +39,7 @@ demo.Controller = (function ($) {
             var imports = $('link[rel=import]');
             for (var i = 0, len = imports.length; i < len; i++) {
                 $('<template/>').appendTo(document.body).load(
-                    $(imports[i]).attr('href'), 
+                    $(imports[i]).attr('href'),
                     function (link, response, status, xhr) {
                         if (status === 'error') {
                             if (link.onerror) {
@@ -61,44 +61,44 @@ demo.Controller = (function ($) {
     };
 
     var injectTemplate = function (options) {
+        var callback = function () {
 
-        // Use an empty page for main page placeholder
-        // and prevent jQuery Mobile to inject a blank page
-        if (!mainPage) {
-            mainPage = $('div[data-main-page]');
-            mainPageId = mainPage.attr('data-main-page');
-        }
+            // Use an empty page for main page placeholder
+            // and prevent jQuery Mobile to inject a blank page
+            if (!mainPage) {
+                mainPage = $('div[data-main-page]');
+                mainPageId = mainPage.attr('data-main-page');
+            }
 
-        var templateDoc = document;
+            var templateDoc = document;
 
-        if (supportsHTMLImports) {
+            if (supportsHTMLImports) {
 
-            // templateDoc refers to the "importee", which is template.html
-            var templateDoc = options.context.ownerDocument;
-        }
+                // templateDoc refers to the "importee", which is template.html
+                var templateDoc = options.context.ownerDocument;
+            }
 
-        // Grab the contents of the template from templateDoc
-        // and append it to the importing document.
-        var template = templateDoc.querySelector('template[data-template-id="' + options.templateId + '"]');
+            // Grab the contents of the template from templateDoc
+            // and append it to the importing document.
+            var template = templateDoc.querySelector('template[data-template-id="' + options.templateId + '"]');
 
-        if (!template) {
-            throw 'template with data-template-id="' + options.templateId + '"] not found';
-        }
+            if (!template) {
+                throw 'template with data-template-id="' + options.templateId + '"] not found';
+            }
 
-        var component;
+            var component;
 
-        // If the browser supports HTML Template, we have to import the page Element
-        // otherwise we will get the HTML Element already injected by jQuery.load()
-        if (supportsHTMLTemplate) {
-            component = document.importNode(template.content, true);
-        } else {
-            component = template.querySelector('#' + options.templateId);
+            // If the browser supports HTML Template, we have to import the page Element
+            // otherwise we will get the HTML Element already injected by jQuery.load()
+            if (supportsHTMLTemplate) {
+                component = document.importNode(template.content, true);
+            } else {
+                component = template.querySelector('#' + options.templateId);
 
-            // remove component from the DOM
-            $(component).remove();
-        }
+                // remove component from the DOM
+                $(component).remove();
+            }
 
-        var callback = function (component) {
 
             // If component is main page, replace it, if not, append
             // component maybe DOM Element or DocumentFragment
@@ -126,10 +126,10 @@ demo.Controller = (function ($) {
         // maybe we have to wait until the DOM is ready
         if (!document.body) {
             $(document).ready(function () {
-                callback(component);
+                callback();
             }, false);
         } else {
-            callback(component);
+            callback();
         }
     };
 
