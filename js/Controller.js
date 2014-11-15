@@ -38,11 +38,21 @@ demo.Controller = (function ($) {
         if (!supportsHTMLImports) {
             var imports = $('link[rel=import]');
             for (var i = 0, len = imports.length; i < len; i++) {
-                $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function (response, status, xhr) {
+                $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function (link, response, status, xhr) {
                     if (status === 'error') {
-                        throw msg + xhr.status + ' ' + xhr.statusText;
+                        if (link.onerror) {
+                            link.onerror({
+                                target: link
+                            });
+                        }
+                    } else {
+                        if (link.onload) {
+                            link.onload({
+                                target: link
+                            });
+                        }
                     }
-                });
+                }.bind(imports[i]));
             }
         }
     };
