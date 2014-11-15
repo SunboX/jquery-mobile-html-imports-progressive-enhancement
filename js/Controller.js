@@ -38,21 +38,24 @@ demo.Controller = (function ($) {
         if (!supportsHTMLImports) {
             var imports = $('link[rel=import]');
             for (var i = 0, len = imports.length; i < len; i++) {
-                $('<template/>').appendTo(document.body).load($(imports[i]).attr('href'), function (link, response, status, xhr) {
-                    if (status === 'error') {
-                        if (link.onerror) {
-                            link.onerror({
-                                target: link
-                            });
+                $('<template/>').appendTo(document.body).load(
+                    $(imports[i]).attr('href'), 
+                    function (link, response, status, xhr) {
+                        if (status === 'error') {
+                            if (link.onerror) {
+                                link.onerror({
+                                    target: link
+                                });
+                            }
+                        } else {
+                            if (link.onload) {
+                                link.onload({
+                                    target: link
+                                });
+                            }
                         }
-                    } else {
-                        if (link.onload) {
-                            link.onload({
-                                target: link
-                            });
-                        }
-                    }
-                }.bind(imports[i]));
+                    }.bind(imports[i])
+                );
             }
         }
     };
