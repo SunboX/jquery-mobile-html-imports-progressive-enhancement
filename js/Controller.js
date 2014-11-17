@@ -24,6 +24,44 @@ demo.Controller = (function ($) {
 
     var mainPage, mainPageId;
 
+    var scanForHTMLImports = function () {
+        // Use jQuery.load() if we don't have native HTML Imports support
+        if (!supportsHTMLImports) {
+            var imports = $('link[rel=import]');
+            for (var i = 0, len = imports.length; i < len; i++) {
+
+                // Don't import already imported links
+                if (imports[i].dataset.imported) {
+                    continue;
+                }
+
+                // Mark the import
+                imports[i].dataset.imported = true;
+
+                $('<template/>').appendTo(document.body).load(
+                    $(imports[i]).attr('href'),
+                    function (link, response, status, xhr) {
+                        if (link) {
+                            if (status === 'error') {
+                                if (link.onerror) {
+                                    link.onerror({
+                                        target: link
+                                    });
+                                }
+                            } else {
+                                if (link.onload) {
+                                    link.onload({
+                                        target: link
+                                    });
+                                }
+                            }
+                        }
+                    }.bind(this, imports[i])
+                );
+            }
+        }
+    };
+
     var init = function (config) {
 
         // Always redirect to main page
@@ -34,30 +72,7 @@ demo.Controller = (function ($) {
             }
         });
 
-        // Use jQuery.load() if we don't have native HTML Imports support
-        if (!supportsHTMLImports) {
-            var imports = $('link[rel=import]');
-            for (var i = 0, len = imports.length; i < len; i++) {
-                $('<template/>').appendTo(document.body).load(
-                    $(imports[i]).attr('href'),
-                    function (link, response, status, xhr) {
-                        if (status === 'error') {
-                            if (link.onerror) {
-                                link.onerror({
-                                    target: link
-                                });
-                            }
-                        } else {
-                            if (link.onload) {
-                                link.onload({
-                                    target: link
-                                });
-                            }
-                        }
-                    }.bind(imports[i])
-                );
-            }
-        }
+        scanForHTMLImports();
     };
 
     var injectTemplate = function (options) {
@@ -133,9 +148,15 @@ demo.Controller = (function ($) {
         }
     };
 
+    var reset = function () {
+        mainPage = null;
+        mainPageId = null;
+    };
+
     var public = {
         init: init,
-        injectTemplate: injectTemplate
+        injectTemplate: injectTemplate,
+        reset: reset
     };
 
     return public;
